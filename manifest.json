@@ -2,6 +2,7 @@
   "name": "質問式モニタリングメモ",
   "short_name": "質問式メモ",
   "description": "質問に答えて文章を作成できるモニタリングメモ",
+  "id": "/monitoring-memo-question/orange-v2",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

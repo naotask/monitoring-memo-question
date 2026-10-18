@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'monitoring-memo-question-orange-v1';
+const CACHE_VERSION = 'monitoring-memo-question-orange-v2';
 
 self.addEventListener('install', () => self.skipWaiting());
 
