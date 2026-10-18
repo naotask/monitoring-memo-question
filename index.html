@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#c95712">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="icon-orange.png">
+  <link rel="apple-touch-icon" href="icon-orange-192.png">
+  <title>質問式モニタリングメモ</title>
+  <style>
+    :root{--ink:#3a2b22;--muted:#74665d;--paper:#fffdf9;--bg:#fff3e8;--line:#e3d2c4;--main:#c95712;--main2:#ffead9;--danger:#a64040;--warn:#fff4d9;--shadow:0 9px 25px rgba(105,58,25,.10)}
+    *{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#fff0e3,#fff9ef);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;font-size:16px;line-height:1.55;min-height:100vh}
+    button,input,textarea{font:inherit}.app{max-width:760px;margin:auto;padding:12px 10px 70px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:4px 2px 13px}.brand{display:flex;align-items:center;gap:10px}.mark{width:44px;height:44px;border-radius:13px;object-fit:cover;box-shadow:var(--shadow)}h1{font-size:1.22rem;margin:0}.sub{font-size:.78rem;color:var(--muted)}
+    .tabs{display:grid;grid-template-columns:1fr 1fr;background:#f6dfcc;padding:4px;border-radius:14px;margin-bottom:12px}.tab{border:0;background:transparent;color:#795b47;border-radius:11px;padding:10px;font-weight:700}.tab.active{background:var(--paper);color:var(--main);box-shadow:0 2px 10px rgba(105,58,25,.1)}
+    .panel{background:rgba(255,253,249,.97);border:1px solid rgba(227,192,163,.8);border-radius:18px;padding:15px;box-shadow:var(--shadow)}.grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:10px}.field{margin-bottom:15px}.field>label,.title{display:block;font-weight:760;margin:0 0 7px}.required{color:var(--danger);font-size:.78rem}
+    input[type=date],input[type=time],input[type=text],textarea{width:100%;border:1.5px solid var(--line);border-radius:11px;background:#fff;padding:11px 12px;color:var(--ink);outline:none}textarea{min-height:82px;resize:vertical}input:focus,textarea:focus{border-color:var(--main);box-shadow:0 0 0 3px rgba(201,87,18,.14)}
+    .question{border-top:1px solid #efddcf;padding:16px 0 2px}.question:first-of-type{margin-top:3px}.qhead{display:flex;gap:9px;align-items:flex-start;margin-bottom:9px}.num{flex:0 0 28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--main);color:#fff;font-weight:800;font-size:.85rem}.qtext{font-weight:800;line-height:1.45}.choices{display:flex;flex-wrap:wrap;gap:8px}.choice{position:relative}.choice input{position:absolute;opacity:0;pointer-events:none}.choice span{display:inline-block;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:.92rem;cursor:pointer;user-select:none}.choice input:checked+span{border-color:var(--main);background:var(--main2);color:var(--main);font-weight:760}.detail{display:none;margin-top:10px}.detail.show{display:block}.hint{font-size:.78rem;color:var(--muted);margin:6px 0 0}
+    .response{display:none;margin-top:14px;border:1px solid #ead7a9;background:var(--warn);border-radius:14px;padding:13px}.response.show{display:block}.response .title{margin-bottom:4px}.response .hint{margin-bottom:9px}.actions{display:flex;flex-wrap:wrap;gap:9px;margin:17px 0 13px}.btn{border:0;border-radius:12px;padding:12px 15px;font-weight:760;cursor:pointer}.primary{background:var(--main);color:#fff}.ghost{background:#f7e9dd;color:#6b5547}.danger{background:#fff0f0;color:var(--danger)}.big{width:100%}.output textarea{min-height:180px;background:#fffaf6}.check{display:flex;align-items:center;gap:9px;padding:11px;border:1px solid var(--line);border-radius:11px;background:#fff;margin-bottom:13px}.check input{width:21px;height:21px;accent-color:var(--main)}.status{text-align:center;min-height:24px;color:var(--main);font-weight:700}.privacy{text-align:center;color:var(--muted);font-size:.76rem;margin:13px 0 0}
+    .list-tools{display:flex;gap:8px;margin-bottom:12px}.list-tools input{flex:1}.cards{display:grid;gap:9px}.card{border:1px solid var(--line);background:#fff;border-radius:14px;padding:13px;text-align:left;width:100%;color:var(--ink)}.card-head{display:flex;justify-content:space-between;gap:8px}.card-name{font-weight:800}.card-date,.preview{font-size:.84rem;color:var(--muted)}.badge{font-size:.74rem;font-weight:750;padding:3px 8px;border-radius:999px;background:#fff1d9;color:#92570f}.badge.done{background:#ffe5cf;color:#a34c14}.preview{margin-top:6px}.empty{text-align:center;color:var(--muted);padding:30px 8px}#listView{display:none}
+    @media(max-width:600px){.app{padding:9px 8px 55px}.panel{padding:13px;border-radius:16px}.grid{grid-template-columns:1fr 1fr}.name-field{grid-column:1/-1}.choice span{padding:9px 11px}.actions{flex-direction:column}.actions .btn{width:100%}}
+  </style>
+</head>
+<body>
+<main class="app">
+  <header class="top"><div class="brand"><img class="mark" src="icon-orange.png" alt="モニタリングメモのアイコン"><div><h1>モニタリングメモ</h1><div class="sub">質問に答えて、聞き漏らしを防ぐ</div></div></div><button class="btn ghost" id="newTop" type="button">新規</button></header>
+  <nav class="tabs"><button class="tab active" id="inputTab" type="button">入力</button><button class="tab" id="listTab" type="button">保存済み一覧 <span id="count"></span></button></nav>
+  <section class="panel" id="inputView">
+    <div class="grid">
+      <div class="field name-field"><label for="name">利用者名 <span class="required">必須</span></label><input id="name" type="text"></div>
+      <div class="field"><label for="date">日付 <span class="required">必須</span></label><input id="date" type="date"></div>
+      <div class="field"><label>時間</label><div style="display:flex;align-items:center;gap:6px"><input id="start" type="time" aria-label="開始時刻"><span>～</span><input id="end" type="time" aria-label="終了時刻"></div></div>
+    </div>
+    <div id="questions">
+      <section class="question" data-id="health"><div class="qhead"><span class="num">1</span><div class="qtext">最近、体調や生活で変わったことはありませんか？</div></div><div class="choices"><label class="choice"><input type="radio" name="health" value="変化なし"><span>変化なし</span></label><label class="choice"><input type="radio" name="health" value="体調に変化あり"><span>体調に変化あり</span></label><label class="choice"><input type="radio" name="health" value="生活に変化あり"><span>生活に変化あり</span></label><label class="choice"><input type="radio" name="health" value="その他"><span>その他</span></label></div><textarea class="detail" id="healthDetail" placeholder="どのような変化か短く入力"></textarea></section>
+      <section class="question" data-id="daily"><div class="qhead"><span class="num">2</span><div class="qtext">食事・睡眠・排泄・薬・動きで、気になることはありますか？</div></div><div class="choices"><label class="choice"><input type="checkbox" name="daily" value="特になし"><span>特になし</span></label><label class="choice"><input type="checkbox" name="daily" value="食事"><span>食事</span></label><label class="choice"><input type="checkbox" name="daily" value="睡眠"><span>睡眠</span></label><label class="choice"><input type="checkbox" name="daily" value="排泄"><span>排泄</span></label><label class="choice"><input type="checkbox" name="daily" value="服薬"><span>服薬</span></label><label class="choice"><input type="checkbox" name="daily" value="動き"><span>動き</span></label><label class="choice"><input type="checkbox" name="daily" value="その他"><span>その他</span></label></div><textarea class="detail" id="dailyDetail" placeholder="気になる内容を短く入力"></textarea><p class="hint">複数選べます</p></section>
+      <section class="question" data-id="service"><div class="qhead"><span class="num">3</span><div class="qtext">今のサービスは予定どおり使えていますか？</div></div><div class="choices"><label class="choice"><input type="radio" name="service" value="予定どおり利用"><span>予定どおり利用</span></label><label class="choice"><input type="radio" name="service" value="一部利用できず"><span>一部利用できず</span></label><label class="choice"><input type="radio" name="service" value="変更・休止あり"><span>変更・休止あり</span></label><label class="choice"><input type="radio" name="service" value="困りごとあり"><span>困りごとあり</span></label><label class="choice"><input type="radio" name="service" value="その他"><span>その他</span></label></div><textarea class="detail" id="serviceDetail" placeholder="利用できなかった理由や困りごとなど"></textarea></section>
+      <section class="question" data-id="effect"><div class="qhead"><span class="num">4</span><div class="qtext">サービスを使って、できるようになったことや困っていることはありますか？</div></div><div class="choices"><label class="choice"><input type="radio" name="effect" value="できていることあり"><span>できていることあり</span></label><label class="choice"><input type="radio" name="effect" value="大きな変化なし"><span>大きな変化なし</span></label><label class="choice"><input type="radio" name="effect" value="一部できていない"><span>一部できていない</span></label><label class="choice"><input type="radio" name="effect" value="困りごとあり"><span>困りごとあり</span></label><label class="choice"><input type="radio" name="effect" value="その他"><span>その他</span></label></div><textarea class="detail" id="effectDetail" placeholder="できたことや困っていることを短く入力"></textarea></section>
+      <section class="question" data-id="wish"><div class="qhead"><span class="num">5</span><div class="qtext">これからも今のままでよいですか？ 変えたいことはありますか？</div></div><div class="choices"><label class="choice"><input type="radio" name="wish" value="現状継続を希望"><span>現状継続を希望</span></label><label class="choice"><input type="radio" name="wish" value="変更希望あり"><span>変更希望あり</span></label><label class="choice"><input type="radio" name="wish" value="相談あり"><span>相談あり</span></label><label class="choice"><input type="radio" name="wish" value="特に希望なし"><span>特に希望なし</span></label><label class="choice"><input type="radio" name="wish" value="その他"><span>その他</span></label></div><textarea class="detail" id="wishDetail" placeholder="本人の言葉や希望を短く入力"></textarea></section>
+      <section class="question" data-id="family"><div class="qhead"><span class="num">6</span><div class="qtext">ご家族から、気になることや困っていることはありますか？</div></div><div class="choices"><label class="choice"><input type="radio" name="family" value="特になし"><span>特になし</span></label><label class="choice"><input type="radio" name="family" value="気になることあり"><span>気になることあり</span></label><label class="choice"><input type="radio" name="family" value="困りごとあり"><span>困りごとあり</span></label><label class="choice"><input type="radio" name="family" value="希望・相談あり"><span>希望・相談あり</span></label><label class="choice"><input type="radio" name="family" value="今回は聞き取りなし"><span>今回は聞き取りなし</span></label><label class="choice"><input type="radio" name="family" value="その他"><span>その他</span></label></div><textarea class="detail" id="familyDetail" placeholder="家族の言葉や気になることを短く入力"></textarea></section>
+    </div>
+    <section class="response" id="responseBox">
+      <div class="title">対応が必要な場合</div><p class="hint">必要なものを複数選べます</p>
+      <div class="choices" id="responseChoices"><label class="choice"><input type="checkbox" name="response" value="経過を確認"><span>経過を確認</span></label><label class="choice"><input type="checkbox" name="response" value="事業所へ確認"><span>事業所へ確認</span></label><label class="choice"><input type="checkbox" name="response" value="主治医等へ確認"><span>主治医等へ確認</span></label><label class="choice"><input type="checkbox" name="response" value="サービス調整を検討"><span>サービス調整を検討</span></label><label class="choice"><input type="checkbox" name="response" value="ケアプラン見直しを検討"><span>ケアプラン見直しを検討</span></label><label class="choice"><input type="checkbox" name="response" value="その他"><span>その他</span></label></div>
+      <textarea id="responseDetail" placeholder="連絡先や確認する内容など（任意）" style="margin-top:10px"></textarea>
+    </section>
+    <div class="field" style="margin-top:16px"><label for="free">そのまま残したい言葉・気づき（任意）</label><textarea id="free" placeholder="本人の言葉や、その場で気づいたことを短く入力"></textarea></div>
+    <div class="actions"><button class="btn primary" id="make" type="button">文章を作成</button><button class="btn ghost" id="download" type="button">文章をファイル保存</button></div>
+    <div class="field output"><label for="output">作成した文章</label><textarea id="output" placeholder="回答後に「文章を作成」を押してください"></textarea></div>
+    <label class="check"><input id="transferred" type="checkbox"><span>介護ソフトへ転記済み</span></label>
+    <button class="btn primary big" id="save" type="button">このメモを保存</button>
+    <div class="actions" id="editActions" style="display:none"><button class="btn danger" id="remove" type="button">このメモを削除</button><button class="btn ghost" id="cancel" type="button">編集をやめる</button></div>
+    <div class="status" id="status"></div><p class="privacy">入力内容は、この端末のブラウザ内に保存されます。</p>
+  </section>
+  <section class="panel" id="listView"><div class="list-tools"><input id="search" type="text" placeholder="利用者名や内容で検索"><button class="btn ghost" id="clearSearch" type="button">解除</button></div><div id="cards" class="cards"></div></section>
+</main>
+<script>
+(()=>{
+const $=id=>document.getElementById(id), KEY='monitoringMemoQuestionV1';
+const QUESTIONS=[
+ {id:'health',question:'最近、体調や生活で変わったことはありませんか？',mode:'single',options:['変化なし','体調に変化あり','生活に変化あり','その他'],plain:['変化なし'],placeholder:'どのような変化か短く入力'},
+ {id:'daily',question:'食事・睡眠・排泄・薬・動きで、気になることはありますか？',mode:'multi',options:['特になし','食事','睡眠','排泄','服薬','動き','その他'],plain:['特になし'],placeholder:'気になる内容を短く入力'},
+ {id:'service',question:'今のサービスは予定どおり使えていますか？',mode:'single',options:['予定どおり利用','一部利用できず','変更・休止あり','困りごとあり','その他'],plain:['予定どおり利用'],placeholder:'利用できなかった理由や困りごとなど'},
+ {id:'effect',question:'サービスを使って、できるようになったことや困っていることはありますか？',mode:'single',options:['できていることあり','大きな変化なし','一部できていない','困りごとあり','その他'],plain:['大きな変化なし'],placeholder:'できたことや困っていることを短く入力'},
+ {id:'wish',question:'これからも今のままでよいですか？ 変えたいことはありますか？',mode:'single',options:['現状継続を希望','変更希望あり','相談あり','特に希望なし','その他'],plain:['現状継続を希望','特に希望なし'],placeholder:'本人の言葉や希望を短く入力'},
+ {id:'family',question:'ご家族から、気になることや困っていることはありますか？',mode:'single',options:['特になし','気になることあり','困りごとあり','希望・相談あり','今回は聞き取りなし','その他'],plain:['特になし','今回は聞き取りなし'],placeholder:'家族の言葉や気になることを短く入力'}
+];
+function selected(id){return [...document.querySelectorAll(`input[name="${id}"]:checked`)].map(x=>x.value)}
+function updateQuestion(q,changed){
+  let vals=selected(q.id);
+  if(q.mode==='multi'&&changed){
+    if(changed.value==='特になし'&&changed.checked){document.querySelectorAll(`input[name="${q.id}"]`).forEach(x=>{if(x!==changed)x.checked=false})}
+    else if(changed.checked){const none=document.querySelector(`input[name="${q.id}"][value="特になし"]`);if(none)none.checked=false}
+    vals=selected(q.id);
+  }
+  const show=vals.some(v=>!q.plain.includes(v));
+  $(`${q.id}Detail`).classList.toggle('show',show);
+  if(!show)$(`${q.id}Detail`).value='';
+  updateResponse();
+}
+QUESTIONS.forEach(q=>document.querySelectorAll(`input[name="${q.id}"]`).forEach(x=>x.addEventListener('change',()=>updateQuestion(q,x))));
+function updateResponse(){const needed=QUESTIONS.some(q=>selected(q.id).some(v=>!q.plain.includes(v)&&!(q.id==='effect'&&v==='できていることあり')));$('responseBox').classList.toggle('show',needed);if(!needed){document.querySelectorAll('input[name="response"]').forEach(x=>x.checked=false);$('responseDetail').value=''}}
+function period(s){s=(s||'').trim();return !s?'':/[。！？!?]$/.test(s)?s:s+'。'}
+function detail(id){return $(`${id}Detail`).value.trim()}
+function makeText(){
+  const p=[];const d=$('date').value;if(d){const[y,m,day]=d.split('-');p.push(`${Number(y)}年${Number(m)}月${Number(day)}日、`)}if($('start').value||$('end').value)p.push(`${$('start').value||'―'}～${$('end').value||'―'}にモニタリングを実施。`);
+  const h=selected('health');if(h.includes('変化なし'))p.push('体調および生活状況に大きな変化はみられない。');else if(h.length){p.push(period(h.join('、')+'。'+detail('health')))}
+  const dy=selected('daily');if(dy.includes('特になし'))p.push('食事、睡眠、排泄、服薬、動作について特に気になる点はない。');else if(dy.length)p.push(period(dy.join('、')+'について気になる点がある。'+detail('daily')))
+  const s=selected('service')[0];if(s==='予定どおり利用')p.push('サービスは予定どおり利用できている。');else if(s)p.push(period(`サービス利用について、${s}。${detail('service')}`))
+  const e=selected('effect')[0];if(e==='大きな変化なし')p.push('サービス利用後も大きな変化なく経過している。');else if(e==='できていることあり')p.push(period('サービス利用により、できていることがある。'+detail('effect')));else if(e)p.push(period(`サービス利用の効果について、${e}。${detail('effect')}`))
+  const w=selected('wish')[0];if(w==='現状継続を希望')p.push('本人は現状の継続を希望されている。');else if(w==='特に希望なし')p.push('本人から特に変更の希望は聞かれなかった。');else if(w)p.push(period(`本人より、${w}。${detail('wish')}`))
+  const f=selected('family')[0];if(f==='特になし')p.push('家族から特に気になることや困りごとの申し出はなかった。');else if(f==='今回は聞き取りなし')p.push('今回は家族からの聞き取りは行っていない。');else if(f)p.push(period(`家族より、${f}。${detail('family')}`))
+  const r=selected('response');if(r.length)p.push(period('今後は、'+r.join('、')+'。'+$('responseDetail').value.trim()));if($('free').value.trim())p.push(period($('free').value));$('output').value=p.join('');message(p.length?'文章を作成しました':'回答を選んでください',!p.length)
+}
+let editingId=null;
+function loadAll(){try{const v=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(v)?v:[]}catch{return[]}}
+function writeAll(v){localStorage.setItem(KEY,JSON.stringify(v))}
+function record(){const answers={};const details={};QUESTIONS.forEach(q=>{answers[q.id]=selected(q.id);details[q.id]=detail(q.id)});return{id:editingId||Date.now().toString(),name:$('name').value.trim(),date:$('date').value,start:$('start').value,end:$('end').value,answers,details,response:selected('response'),responseDetail:$('responseDetail').value.trim(),free:$('free').value.trim(),output:$('output').value.trim(),transferred:$('transferred').checked,updatedAt:new Date().toISOString()}}
+function save(){if(!$('date').value||!$('name').value.trim()){message('日付と利用者名を入力してください',true);return}const all=loadAll(),r=record(),i=all.findIndex(x=>x.id===r.id);if(i>=0)all[i]=r;else all.push(r);writeAll(all);editingId=r.id;$('editActions').style.display='flex';$('save').textContent='変更を保存';updateCount();message('保存しました')}
+function clearAll(){editingId=null;document.querySelectorAll('input[type="radio"],input[type="checkbox"]').forEach(x=>x.checked=false);document.querySelectorAll('textarea,input[type="text"],input[type="time"]').forEach(x=>x.value='');document.querySelectorAll('.detail,.response').forEach(x=>x.classList.remove('show'));$('date').value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);$('editActions').style.display='none';$('save').textContent='このメモを保存'}
+function edit(id){const r=loadAll().find(x=>x.id===id);if(!r)return;clearAll();editingId=id;$('name').value=r.name||'';$('date').value=r.date||'';$('start').value=r.start||'';$('end').value=r.end||'';$('free').value=r.free||'';$('output').value=r.output||'';$('transferred').checked=!!r.transferred;QUESTIONS.forEach(q=>{const vals=(r.answers&&r.answers[q.id])||[];document.querySelectorAll(`input[name="${q.id}"]`).forEach(x=>x.checked=vals.includes(x.value));$(`${q.id}Detail`).value=(r.details&&r.details[q.id])||'';updateQuestion(q)});document.querySelectorAll('input[name="response"]').forEach(x=>x.checked=(r.response||[]).includes(x.value));$('responseDetail').value=r.responseDetail||'';$('editActions').style.display='flex';$('save').textContent='変更を保存';show('input');scrollTo({top:0,behavior:'smooth'})}
+function remove(){if(!editingId||!confirm('このメモを削除しますか？'))return;writeAll(loadAll().filter(x=>x.id!==editingId));clearAll();updateCount();show('list')}
+function html(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){const q=$('search').value.trim().toLowerCase();let all=loadAll().sort((a,b)=>(b.date||'').localeCompare(a.date||''));if(q)all=all.filter(r=>JSON.stringify(r).toLowerCase().includes(q));$('cards').innerHTML=all.length?all.map(r=>`<button class="card" data-id="${html(r.id)}"><span class="card-head"><span><span class="card-name">${html(r.name)}</span><br><span class="card-date">${html(r.date)} ${html(r.start||'')}${r.end?'～'+html(r.end):''}</span></span><span class="badge ${r.transferred?'done':''}">${r.transferred?'転記済み':'未転記'}</span></span><div class="preview">${html(r.output||r.free||'内容未入力')}</div></button>`).join(''):'<div class="empty">保存したメモはありません</div>';document.querySelectorAll('.card').forEach(x=>x.onclick=()=>edit(x.dataset.id))}
+function show(v){const input=v==='input';$('inputView').style.display=input?'block':'none';$('listView').style.display=input?'none':'block';$('inputTab').classList.toggle('active',input);$('listTab').classList.toggle('active',!input);if(!input)render()}
+function updateCount(){$('count').textContent=`(${loadAll().length})`}
+function message(s,bad=false){$('status').textContent=s;$('status').style.color=bad?'var(--danger)':'var(--main)';clearTimeout(message.t);message.t=setTimeout(()=>{$('status').textContent=''},2500)}
+$('make').onclick=makeText;$('save').onclick=save;$('newTop').onclick=()=>{clearAll();show('input')};$('cancel').onclick=clearAll;$('remove').onclick=remove;$('inputTab').onclick=()=>show('input');$('listTab').onclick=()=>show('list');$('search').oninput=render;$('clearSearch').onclick=()=>{$('search').value='';render()};$('download').onclick=()=>{const text=$('output').value.trim();if(!text){message('保存する文章がありません',true);return}const blob=new Blob([text],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='monitoring-memo-'+($('date').value||'').replaceAll('-','')+'.txt';a.click();URL.revokeObjectURL(url)};
+clearAll();updateCount();
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}))}
+})();
+</script>
+</body>
+</html>
